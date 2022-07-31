@@ -28,7 +28,32 @@ Default output format [None]:
 
 ## Design
 
+![Architecture diagram](design/architecture_diagram.png)
+
+If you want to regenerate architecture diagram from code, use below commands:
+
+```
+cd design
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+python architecture_diagram.py
+```
+
 ## Infrastructure
+
+Whole infrastructure code can be deployed using below commands. Remember to pass correct AWS access key and secret for your account. After deployment in output from Terraform you can find all details how to access ALB or bastion hosts:
+
+```
+cd infra
+
+terraform init
+terraform plan
+terraform apply -auto-approve
+terraform output
+```
 
 Command to manually check Lamdba, S3, DynamoDB, SNS and SQS:
 
