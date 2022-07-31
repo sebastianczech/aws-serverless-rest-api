@@ -9,6 +9,9 @@ terraform {
   required_version = ">= 1.2.0"
 }
 
+provider "archive" {
+}
+
 provider "aws" {
   alias  = "cloud"
   region = var.region
