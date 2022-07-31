@@ -6,7 +6,7 @@ from diagrams.aws.storage import S3
 from diagrams.aws.database import Dynamodb
 from diagrams.programming.language import Python
 
-with Diagram("Architecture diagram", show=False, direction="LR"):
+with Diagram("Architecture diagram", show=False, direction="TB"):
     user = Tablet("end user's web browser")
 
     with Cluster("AWS"):
