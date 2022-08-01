@@ -13,7 +13,7 @@ with Diagram("Architecture diagram", show=False, direction="TB"):
         lambda_producer = Lambda("producer API")
         lambda_consumer = Lambda("consumer API")
         sqs_queue = SQS("message queue")
-        s3_storage = S3("object storage")
+        # s3_storage = S3("object storage")
         dynamo_database = Dynamodb("database")
         sns_notifications = SNS("notification topic")
 
@@ -22,15 +22,15 @@ with Diagram("Architecture diagram", show=False, direction="TB"):
         python_consumer = Python("consumer API")
         local_sqs_queue = SQS("message queue")
         local_s3_storage = S3("object storage")
-        local_dynamo_database = Dynamodb("database")
-        local_sns_notifications = SNS("notification topic")        
-    
+        # local_dynamo_database = Dynamodb("database")
+        # local_sns_notifications = SNS("notification topic")
+
     user >> lambda_producer >> sqs_queue >> lambda_consumer
     lambda_consumer >> dynamo_database
     lambda_consumer >> sns_notifications
-    lambda_consumer >> s3_storage
+    # lambda_consumer >> s3_storage
 
     user >> python_producer >> local_sqs_queue >> python_consumer
-    python_consumer >> local_dynamo_database
-    python_consumer >> local_sns_notifications
+    # python_consumer >> local_dynamo_database
+    # python_consumer >> local_sns_notifications
     python_consumer >> local_s3_storage
