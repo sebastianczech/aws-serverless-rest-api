@@ -17,8 +17,14 @@ resource "aws_iam_role" "lambda_producer_role" {
 }
 
 data "archive_file" "python_lambda_producer_package" {
-  type        = "zip"
-  source_file = "files/producer.py"
+  type = "zip"
+  # source_file = "files/producer.py"
+  source {
+    content = templatefile("files/producer.py", {
+      queue_url = "${aws_sqs_queue.cloud_sqs_serverless_rest_api.id}"
+    })
+    filename = "producer.py"
+  }
   output_path = "files/producer.zip"
 }
 
