@@ -67,3 +67,15 @@ aws --endpoint-url=http://localhost:4566 sqs list-queues
 ```
 
 ## Application
+
+If you want to execute whole application by calling Lamdba function, use below Python code:
+
+```
+cd app
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+python lambda_function_url_iam_auth.py
+```
