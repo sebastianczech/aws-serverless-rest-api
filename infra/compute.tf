@@ -77,7 +77,7 @@ resource "aws_lambda_function" "lambda_producer" {
 resource "aws_lambda_function_url" "lambda_producer_endpoint" {
   provider           = aws.cloud
   function_name      = aws_lambda_function.lambda_producer.function_name
-  authorization_type = "AWS_IAM"
+  authorization_type = "AWS_IAM" # "NONE"
 
   cors {
     allow_credentials = true
@@ -102,3 +102,12 @@ resource "aws_lambda_permission" "allow_iam_user" {
   function_url_auth_type = "AWS_IAM"
   principal              = data.aws_iam_user.iam_user_seba.arn
 }
+
+# resource "aws_lambda_permission" "allow_all" {
+#   provider               = aws.cloud
+#   statement_id           = "FunctionURLAllowPublicAccess"
+#   action                 = "lambda:InvokeFunctionUrl"
+#   function_name          = aws_lambda_function.lambda_producer.function_name
+#   function_url_auth_type = "NONE"
+#   principal              = "*"
+# }
