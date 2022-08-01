@@ -42,7 +42,7 @@ def lambda_handler(event, context):
             },
             'Message': {
                 'DataType': 'String',
-                'StringValue': event['message'] if 'message' in event else 'Empty message'
+                'StringValue': event['body']['message'] if 'body' in event and 'message' in event['body'] else 'Empty message'
             },
         },
         MessageBody=(
@@ -50,4 +50,15 @@ def lambda_handler(event, context):
         )
     )
 
-    print(response['MessageId'])
+    print("Received SQS response: " + response['MessageId'])
+
+    return {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": json.dumps({
+            "RequestID ": context.aws_request_id,
+            "ReceivedMessage": event['body']['message'] if 'body' in event and 'message' in event['body'] else 'Empty message'
+        })
+    }
