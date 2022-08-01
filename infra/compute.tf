@@ -88,3 +88,17 @@ resource "aws_lambda_function_url" "lambda_producer_endpoint" {
     max_age           = 86400
   }
 }
+
+data "aws_iam_user" "iam_user_seba" {
+  provider  = aws.cloud
+  user_name = "seba"
+}
+
+resource "aws_lambda_permission" "allow_iam_user" {
+  provider               = aws.cloud
+  statement_id           = "AllowExecutionForIamUser"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.lambda_producer.function_name
+  function_url_auth_type = "AWS_IAM"
+  principal              = data.aws_iam_user.iam_user_seba.arn
+}
