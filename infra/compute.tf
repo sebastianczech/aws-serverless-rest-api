@@ -75,8 +75,8 @@ resource "aws_lambda_function" "lambda_producer" {
 }
 
 resource "aws_lambda_function_url" "lambda_producer_endpoint" {
+  provider           = aws.cloud
   function_name      = aws_lambda_function.lambda_producer.function_name
-  qualifier          = "lambda_producer"
   authorization_type = "AWS_IAM"
 
   cors {

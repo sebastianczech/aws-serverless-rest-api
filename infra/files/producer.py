@@ -31,7 +31,19 @@ def lambda_handler(event, context):
             'Version': {
                 'DataType': 'Number',
                 'StringValue': '1'
-            }
+            },
+            'ARN': {
+                'DataType': 'String',
+                'StringValue': context.invoked_function_arn
+            },
+            'RequestID': {
+                'DataType': 'String',
+                'StringValue': context.aws_request_id
+            },
+            'Message': {
+                'DataType': 'String',
+                'StringValue': event['message'] if 'message' in event else 'Empty message'
+            },
         },
         MessageBody=(
             'Information created by Lambda producer implemented in Python and deployed by Terraform.'
