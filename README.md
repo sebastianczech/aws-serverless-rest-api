@@ -68,7 +68,11 @@ aws --endpoint-url=http://localhost:4566 sqs list-queues
 
 ## Application
 
-If you want to execute whole application by calling Lamdba function, use below Python code:
+If you want to execute whole application by calling Lamdba function, you can use:
+
+1. editor in AWS Lambda web page and test function
+2. Postman with configured AWS authorization
+3. below Python code:
 
 ```
 cd app
