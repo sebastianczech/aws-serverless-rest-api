@@ -10,11 +10,18 @@ import boto3
 print('Loading function')
 sqs = boto3.client('sqs')
 # queue_url = 'https://sqs.us-east-1.amazonaws.com/884522662008/cloud_sqs_serverless_rest_api'
-queue_url = "${queue_url}"
+queue_url = "https://sqs.us-east-1.amazonaws.com/884522662008/cloud_sqs_serverless_rest_api"
 
 
 def lambda_handler(event, context):
     print("Received event: " + json.dumps(event, indent=2))
+
+    if 'body' in event:
+        message = str(json.loads(str(event['body'])))
+    elif 'queryStringParameters' in event:
+        message = str(event['queryStringParameters'])
+    else:
+        message = "empty message"
 
     response = sqs.send_message(
         QueueUrl=queue_url,
@@ -42,7 +49,7 @@ def lambda_handler(event, context):
             },
             'Message': {
                 'DataType': 'String',
-                'StringValue': event['body']['message'] if 'body' in event and 'message' in event['body'] else 'Empty message'
+                'StringValue': message
             },
         },
         MessageBody=(
@@ -59,6 +66,6 @@ def lambda_handler(event, context):
         },
         "body": json.dumps({
             "RequestID ": context.aws_request_id,
-            "ReceivedMessage": event['body']['message'] if 'body' in event and 'message' in event['body'] else 'Empty message'
+            "ReceivedMessage": message
         })
     }
