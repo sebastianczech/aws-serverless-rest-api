@@ -10,7 +10,7 @@ import boto3
 print('Loading function')
 sqs = boto3.client('sqs')
 # queue_url = 'https://sqs.us-east-1.amazonaws.com/884522662008/cloud_sqs_serverless_rest_api'
-queue_url = "https://sqs.us-east-1.amazonaws.com/884522662008/cloud_sqs_serverless_rest_api"
+queue_url = "${queue_url}"
 
 
 def lambda_handler(event, context):
