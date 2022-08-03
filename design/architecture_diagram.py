@@ -3,10 +3,11 @@ from diagrams.generic.device import Tablet
 from diagrams.aws.compute import Lambda
 from diagrams.aws.integration import SQS, SNS
 from diagrams.aws.storage import S3
+from diagrams.aws.management import Cloudwatch
 from diagrams.aws.database import Dynamodb
 from diagrams.programming.language import Python
 
-with Diagram("Architecture diagram", show=False, direction="TB"):
+with Diagram("Architecture diagram", show=False, direction="LR"):
     user = Tablet("end user's web browser")
 
     with Cluster("AWS"):
@@ -16,6 +17,7 @@ with Diagram("Architecture diagram", show=False, direction="TB"):
         # s3_storage = S3("object storage")
         dynamo_database = Dynamodb("database")
         sns_notifications = SNS("notification topic")
+        cloud_watch_logs = Cloudwatch("logs")
 
     with Cluster("Localstack"):
         python_producer = Python("producer API")
@@ -28,6 +30,8 @@ with Diagram("Architecture diagram", show=False, direction="TB"):
     user >> lambda_producer >> sqs_queue >> lambda_consumer
     lambda_consumer >> dynamo_database
     lambda_consumer >> sns_notifications
+    lambda_producer >> cloud_watch_logs
+    lambda_consumer >> cloud_watch_logs
     # lambda_consumer >> s3_storage
 
     user >> python_producer >> local_sqs_queue >> python_consumer
