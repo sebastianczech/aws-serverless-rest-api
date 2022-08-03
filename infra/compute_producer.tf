@@ -43,12 +43,12 @@ resource "aws_iam_policy" "lambda_producer_sqs_send_iam_policy" {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "Stmt1659292411789",
+      "Sid": "ProducerStatement",
       "Action": [
         "sqs:SendMessage"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:sqs:us-east-1:884522662008:cloud_sqs_serverless_rest_api"
+      "Resource": "${aws_sqs_queue.cloud_sqs_serverless_rest_api.arn}"
     }
   ]
 }

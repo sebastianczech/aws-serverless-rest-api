@@ -52,11 +52,11 @@ def lambda_handler(event, context):
             },
         },
         MessageBody=(
-            'Information created by Lambda producer implemented in Python and deployed by Terraform.'
+            'Information created by Lambda producer implemented in Python and deployed by Terraform with message: ' + message
         )
     )
 
-    print("Received SQS response: " + response['MessageId'])
+    print("Send SQS message: " + response['MessageId'])
 
     return {
         "statusCode": 200,

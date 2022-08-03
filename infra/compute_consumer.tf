@@ -19,33 +19,40 @@ data "archive_file" "python_lambda_consumer_package" {
   output_path = "files/consumer.zip"
 }
 
-# # https://awspolicygen.s3.amazonaws.com/policygen.html
-# resource "aws_iam_policy" "lambda_consumer_sqs_send_iam_policy" {
-#   name        = "lambda_consumer_sqs_send_iam_policy"
-#   path        = "/"
-#   description = "IAM policy for sending messages to SQS from a Lambda"
+# https://awspolicygen.s3.amazonaws.com/policygen.html
+resource "aws_iam_policy" "lambda_consumer_sqs_receive_iam_policy" {
+  name        = "lambda_consumer_sqs_receive_iam_policy"
+  path        = "/"
+  description = "IAM policy for reciving messages to Lambda from SQS"
 
-#   policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Sid": "Stmt1659292411789",
-#       "Action": [
-#         "sqs:SendMessage"
-#       ],
-#       "Effect": "Allow",
-#       "Resource": "arn:aws:sqs:us-east-1:884522662008:cloud_sqs_serverless_rest_api"
-#     }
-#   ]
-# }
-# EOF
-# }
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ConsumerStatement",
+      "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_sqs_queue.cloud_sqs_serverless_rest_api.arn}"
+    }
+  ]
+}
+EOF
+}
 
-# resource "aws_iam_role_policy_attachment" "lambda_consumer_sqs" {
-#   role       = aws_iam_role.lambda_consumer_role.name
-#   policy_arn = aws_iam_policy.lambda_consumer_sqs_send_iam_policy.arn
-# }
+resource "aws_iam_role_policy_attachment" "lambda_consumer_sqs" {
+  role       = aws_iam_role.lambda_consumer_role.name
+  policy_arn = aws_iam_policy.lambda_consumer_sqs_receive_iam_policy.arn
+}
+
+resource "aws_lambda_event_source_mapping" "event_source_mapping_sqs_lambda_consumer" {
+  event_source_arn = aws_sqs_queue.cloud_sqs_serverless_rest_api.arn
+  function_name    = aws_lambda_function.lambda_consumer.arn
+}
 
 resource "aws_lambda_function" "lambda_consumer" {
   provider         = aws.cloud

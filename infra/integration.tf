@@ -8,6 +8,30 @@ resource "aws_sns_topic" "localstack_sns_serverless_rest_api" {
   name     = "localstack_sns_serverless_rest_api"
 }
 
+# resource "aws_sqs_queue_policy" "cloud_sqs_serverless_rest_api_policy" {
+#   provider  = aws.cloud
+#   queue_url = aws_sqs_queue.cloud_sqs_serverless_rest_api.id
+
+#   policy = <<EOF
+# {
+#   "Version": "2012-10-17",
+#   "Statement": [
+#     {
+#       "Sid": "SqsStatement",
+#       "Effect": "Allow",
+#       "Principal": "*",
+#       "Action": [
+#         "lambda:CreateEventSourceMapping",
+#         "lambda:ListEventSourceMappings",
+#         "lambda:ListFunctions"
+#       ],
+#       "Resource": "${aws_lambda_function.lambda_consumer.arn}"
+#     }
+#   ]
+# }
+# EOF
+# }
+
 resource "aws_sqs_queue" "cloud_sqs_serverless_rest_api" {
   provider = aws.cloud
   name     = "cloud_sqs_serverless_rest_api"
