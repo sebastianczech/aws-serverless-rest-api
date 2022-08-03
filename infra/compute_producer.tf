@@ -51,7 +51,7 @@ resource "aws_iam_policy" "lambda_producer_sqs_send_iam_policy" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_logs" {
+resource "aws_iam_role_policy_attachment" "lambda_producer_sqs" {
   role       = aws_iam_role.lambda_producer_role.name
   policy_arn = aws_iam_policy.lambda_producer_sqs_send_iam_policy.arn
 }
