@@ -1,3 +1,7 @@
+locals {
+  function_name_producer = "producer"
+}
+
 data "aws_iam_policy_document" "lambda_assume_role_policy" {
   provider = aws.cloud
   statement {
@@ -59,7 +63,7 @@ resource "aws_iam_role_policy_attachment" "lambda_producer_sqs" {
 resource "aws_lambda_function" "lambda_producer" {
   provider         = aws.cloud
   filename         = "files/producer.zip"
-  function_name    = "producer"
+  function_name    = local.function_name_producer
   role             = aws_iam_role.lambda_producer_role.arn
   source_code_hash = filebase64sha256("files/producer.zip")
 
@@ -72,6 +76,42 @@ resource "aws_lambda_function" "lambda_producer" {
       foo = "bar"
     }
   }
+}
+
+resource "aws_cloudwatch_log_group" "lambda_producer_log_group" {
+  provider          = aws.cloud
+  name              = "/aws/lambda/${local.function_name_producer}"
+  retention_in_days = 1
+}
+
+resource "aws_iam_policy" "lambda_iam_producer_logging" {
+  provider    = aws.cloud
+  name        = "lambda_logging_producer"
+  path        = "/"
+  description = "IAM policy for logging from a lambda producer"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:*",
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_producer_logs" {
+  provider   = aws.cloud
+  role       = aws_iam_role.lambda_producer_role.name
+  policy_arn = aws_iam_policy.lambda_iam_producer_logging.arn
 }
 
 resource "aws_lambda_function_url" "lambda_producer_endpoint" {
