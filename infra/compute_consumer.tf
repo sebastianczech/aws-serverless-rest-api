@@ -12,7 +12,7 @@ data "archive_file" "python_lambda_consumer_package" {
   type = "zip"
   source {
     content = templatefile("files/consumer.py", {
-
+      topic_url = "${aws_sns_topic.cloud_sns_serverless_rest_api.id}"
     })
     filename = "consumer.py"
   }
