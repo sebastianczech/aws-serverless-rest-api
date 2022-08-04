@@ -44,9 +44,36 @@ resource "aws_iam_policy" "lambda_consumer_sqs_receive_iam_policy" {
 EOF
 }
 
+resource "aws_iam_policy" "lambda_consumer_sns_publish_iam_policy" {
+  name        = "lambda_consumer_sns_publish_iam_policy"
+  path        = "/"
+  description = "IAM policy for publish evento from Lambda to SNS"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1659644631574",
+      "Action": [
+        "sns:Publish"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_sns_topic.cloud_sns_serverless_rest_api.arn}"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role_policy_attachment" "lambda_consumer_sqs" {
   role       = aws_iam_role.lambda_consumer_role.name
   policy_arn = aws_iam_policy.lambda_consumer_sqs_receive_iam_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_consumer_sns" {
+  role       = aws_iam_role.lambda_consumer_role.name
+  policy_arn = aws_iam_policy.lambda_consumer_sns_publish_iam_policy.arn
 }
 
 resource "aws_lambda_event_source_mapping" "event_source_mapping_sqs_lambda_consumer" {

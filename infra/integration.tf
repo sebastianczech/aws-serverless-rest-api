@@ -1,3 +1,7 @@
+locals {
+  emails = ["sebaczech@gmail.com"]
+}
+
 resource "aws_sqs_queue" "localstack_sqs_serverless_rest_api" {
   provider = aws.localstack
   name     = "localstack_sqs_serverless_rest_api"
@@ -35,6 +39,13 @@ resource "aws_sns_topic" "localstack_sns_serverless_rest_api" {
 resource "aws_sqs_queue" "cloud_sqs_serverless_rest_api" {
   provider = aws.cloud
   name     = "cloud_sqs_serverless_rest_api"
+}
+
+resource "aws_sns_topic_subscription" "cloud_sns_topic_email_subscription" {
+  count     = length(local.emails)
+  topic_arn = aws_sns_topic.cloud_sns_serverless_rest_api.arn
+  protocol  = "email"
+  endpoint  = local.emails[count.index]
 }
 
 resource "aws_sns_topic" "cloud_sns_serverless_rest_api" {
