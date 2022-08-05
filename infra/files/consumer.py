@@ -17,8 +17,20 @@ def lambda_handler(event, context):
         data = json.loads(payload)
         print("Converted data: " + str(data))
 
-        if "message" in data:
-            dynamodb.put_item(TableName=table_url, Item={'message':{'S':data["message"]}})
+        if "message" in data and "key" in data:
+            item = dynamodb.put_item(
+                TableName=table_url,
+                Item=
+                {
+                    'ID': {
+                        'S': str(data["key"]),
+                    },
+                    'message': {
+                        'S': str(data["message"]),
+                    }
+                }
+            )
+            print("Insert item into DynamoDB: " + item['ResponseMetadata']['RequestId'])
 
         if "transport" in data and data["transport"] == "mail":
             subject = "Message from SQS"
