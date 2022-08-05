@@ -52,7 +52,7 @@ def lambda_handler(event, context):
             },
         },
         MessageBody=(
-            'Information created by Lambda producer implemented in Python and deployed by Terraform with message: ' + message
+            message
         )
     )
 
