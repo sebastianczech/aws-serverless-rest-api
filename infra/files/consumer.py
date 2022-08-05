@@ -17,7 +17,10 @@ def lambda_handler(event, context):
         data = json.loads(payload)
         print("Converted data: " + str(data))
 
-        if ("transport" in data and data["transport"] == "mail"):
+        if "message" in data:
+            dynamodb.put_item(TableName=table_url, Item={'message':{'S':data["message"]}})
+
+        if "transport" in data and data["transport"] == "mail":
             subject = "Message from SQS"
             response = sns.publish(
                 TopicArn=topic_url,
