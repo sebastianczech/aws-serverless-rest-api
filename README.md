@@ -89,5 +89,10 @@ pip install -r requirements.txt
 source export_aws_secrets.sh
 python aws_lambda_function_url_iam_auth_get.py
 python aws_lambda_function_url_iam_auth_post.py
+```
+
+In order to check localstack with DynamoDB, SNS, SQS or S3, you can use script:
+
+```
 python localstack_dynamodb_s3_sqs_sns.py
 ```
