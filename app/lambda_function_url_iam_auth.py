@@ -29,7 +29,7 @@ service = 'lambda'
 host = 'ws6puhi7k7thxz7vbqmvrbn45m0axxia.lambda-url.us-east-1.on.aws'
 region = 'us-east-1'
 endpoint = 'https://ws6puhi7k7thxz7vbqmvrbn45m0axxia.lambda-url.us-east-1.on.aws'
-request_parameters = 'message=HelloWorldFromCommandLine'
+request_parameters = 'message=HelloWorldFromCommandLine&key=3&transport=mail'
 
 # Key derivation functions. See:
 # http://docs.aws.amazon.com/general/latest/gr/signature-v4-examples.html#signature-v4-examples-python

@@ -31,3 +31,4 @@ override.tf.json
 
 design/venv
 app/venv
+app/export_aws_secrets.sh
