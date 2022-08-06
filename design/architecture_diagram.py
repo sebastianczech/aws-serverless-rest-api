@@ -14,27 +14,25 @@ with Diagram("Architecture diagram", show=False, direction="LR"):
         lambda_producer = Lambda("producer API")
         lambda_consumer = Lambda("consumer API")
         sqs_queue = SQS("message queue")
-        # s3_storage = S3("object storage")
         dynamo_database = Dynamodb("database")
         sns_notifications = SNS("notification topic")
         cloud_watch_logs = Cloudwatch("logs")
 
     with Cluster("Localstack"):
-        python_producer = Python("producer API")
-        python_consumer = Python("consumer API")
+        python_app = Python("boto3 client")
         local_sqs_queue = SQS("message queue")
         local_s3_storage = S3("object storage")
-        # local_dynamo_database = Dynamodb("database")
-        # local_sns_notifications = SNS("notification topic")
+        local_sns_notifications = SNS("notification topic")
+        local_dynamo_database = Dynamodb("database")
 
     user >> lambda_producer >> sqs_queue >> lambda_consumer
     lambda_consumer >> dynamo_database
     lambda_consumer >> sns_notifications
     lambda_producer >> cloud_watch_logs
     lambda_consumer >> cloud_watch_logs
-    # lambda_consumer >> s3_storage
 
-    user >> python_producer >> local_sqs_queue >> python_consumer
-    # python_consumer >> local_dynamo_database
-    # python_consumer >> local_sns_notifications
-    python_consumer >> local_s3_storage
+    user >> python_app 
+    python_app >> local_sqs_queue
+    python_app >> local_dynamo_database
+    python_app >> local_sns_notifications
+    python_app >> local_s3_storage
