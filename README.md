@@ -87,5 +87,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 source export_aws_secrets.sh
-python lambda_function_url_iam_auth.py
+python aws_lambda_function_url_iam_auth_get.py
+python aws_lambda_function_url_iam_auth_post.py
+python localstack_dynamodb_s3_sqs_sns.py
 ```
