@@ -64,6 +64,11 @@ aws --endpoint-url=http://localhost:4566 s3 ls s3://localstack-s3-serverless-res
 aws --endpoint-url=http://localhost:4566 dynamodb list-tables
 aws --endpoint-url=http://localhost:4566 sns list-topics
 aws --endpoint-url=http://localhost:4566 sqs list-queues
+
+aws lambda list-functions
+aws dynamodb list-tables
+aws sns list-topics
+aws sqs list-queues
 ```
 
 ## Application
@@ -81,5 +86,6 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
+source export_aws_secrets.sh
 python lambda_function_url_iam_auth.py
 ```
