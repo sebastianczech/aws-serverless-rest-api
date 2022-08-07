@@ -1,4 +1,4 @@
-# aws-serverless-rest-api
+# AWS serverless REST API
 
 AWS serverless REST API provisioned automatically by Terraform, based mainly on [AWS Free Tier](https://aws.amazon.com/free/).
 
