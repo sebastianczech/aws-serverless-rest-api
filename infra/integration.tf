@@ -3,11 +3,13 @@ locals {
 }
 
 resource "aws_sqs_queue" "localstack_sqs_serverless_rest_api" {
+  count    = var.create_services_on_localstack ? 1 : 0
   provider = aws.localstack
   name     = "localstack_sqs_serverless_rest_api"
 }
 
 resource "aws_sns_topic" "localstack_sns_serverless_rest_api" {
+  count    = var.create_services_on_localstack ? 1 : 0
   provider = aws.localstack
   name     = "localstack_sns_serverless_rest_api"
 }

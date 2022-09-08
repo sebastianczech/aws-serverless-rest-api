@@ -1,4 +1,5 @@
 resource "aws_dynamodb_table" "localstack_dynamodb_serverless_rest_api" {
+  count          = var.create_services_on_localstack ? 1 : 0
   provider       = aws.localstack
   name           = "localstack_dynamodb_serverless_rest_api"
   read_capacity  = "20"
