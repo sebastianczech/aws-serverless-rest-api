@@ -71,6 +71,24 @@ aws sns list-topics
 aws sqs list-queues
 ```
 
+In infrastructure code there was used one feature available from 1.5-beta version of Terraform - check {} block, which was used in [producer Lambda to verify deployment](infra/compute_producer.tf):
+
+```terraform
+check "lambda_deployed" {
+  data "external" "this" {
+    program = ["curl", "${aws_lambda_function_url.lambda_producer_endpoint.function_url}"]
+  }
+
+  assert {
+    # If we execution function using URL without authentication, then it should be received forbidden message, if Lambda is deployed correctly
+    condition = data.external.this.result.Message == "Forbidden"
+    error_message = format("The Lambda %s is not deployed.",
+      aws_lambda_function.lambda_producer.function_name
+    )
+  }
+}
+```
+
 ## Application
 
 If you want to execute whole application by calling Lamdba function, you can use:
