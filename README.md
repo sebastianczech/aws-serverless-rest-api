@@ -89,6 +89,69 @@ check "lambda_deployed" {
 }
 ```
 
+Here there are successful results of checks:
+
+```
+Terraform will perform the following actions:
+
+  # data.external.this will be read during apply
+  # (config will be reloaded to verify a check block)
+ <= data "external" "this" {
+      + id      = "-"
+      + program = [
+          + "curl",
+          + "https://7nd44kore5shut24s5v5up5aa40ibndl.lambda-url.us-east-1.on.aws/",
+        ]
+      + result  = {
+          + "Message" = "Forbidden"
+        }
+    }
+
+Plan: 0 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+data.external.this: Reading...
+data.external.this: Read complete after 1s [id=-]
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+```
+
+Moreover there were added tests available from 1.6 version of Terraform - there is defined 1 test [for producer Lambda](infra/compute_producer.tftest.hcl):
+
+```hcl
+run "check_producer_lambda_url" {
+
+  command = apply
+
+  variables {
+    prefix = "test"
+  }
+
+  assert {
+    condition     = length(aws_lambda_function_url.lambda_producer_endpoint.function_url) > 0
+    error_message = "Lambda producer URL should not be empty"
+  }
+
+}
+```
+
+Here there are successful results of tests:
+
+```
+$ terraform test
+compute_producer.tftest.hcl... in progress
+  run "check_producer_lambda_url"... pass
+compute_producer.tftest.hcl... tearing down
+compute_producer.tftest.hcl... pass
+
+Success! 1 passed, 0 failed.
+```
+
 ## Application
 
 If you want to execute whole application by calling Lamdba function, you can use:
