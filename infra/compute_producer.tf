@@ -1,5 +1,5 @@
 locals {
-  function_name_producer = "producer"
+  function_name_producer = "${var.prefix}producer"
 }
 
 data "aws_iam_policy_document" "lambda_assume_role_policy" {
@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 
 resource "aws_iam_role" "lambda_producer_role" {
   provider           = aws.cloud
-  name               = "lambda_producer_role"
+  name               = "${var.prefix}lambda_producer_role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
@@ -34,7 +34,7 @@ data "archive_file" "python_lambda_producer_package" {
 
 # https://awspolicygen.s3.amazonaws.com/policygen.html
 resource "aws_iam_policy" "lambda_producer_sqs_send_iam_policy" {
-  name        = "lambda_producer_sqs_send_iam_policy"
+  name        = "${var.prefix}lambda_producer_sqs_send_iam_policy"
   path        = "/"
   description = "IAM policy for sending messages to SQS from a Lambda"
 
@@ -86,7 +86,7 @@ resource "aws_cloudwatch_log_group" "lambda_producer_log_group" {
 
 resource "aws_iam_policy" "lambda_iam_producer_logging" {
   provider    = aws.cloud
-  name        = "lambda_logging_producer"
+  name        = "${var.prefix}lambda_logging_producer"
   path        = "/"
   description = "IAM policy for logging from a lambda producer"
 

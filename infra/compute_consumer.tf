@@ -1,10 +1,10 @@
 locals {
-  function_name_consumer = "consumer"
+  function_name_consumer = "${var.prefix}consumer"
 }
 
 resource "aws_iam_role" "lambda_consumer_role" {
   provider           = aws.cloud
-  name               = "lambda_consumer_role"
+  name               = "${var.prefix}lambda_consumer_role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
@@ -22,7 +22,7 @@ data "archive_file" "python_lambda_consumer_package" {
 
 # https://awspolicygen.s3.amazonaws.com/policygen.html
 resource "aws_iam_policy" "lambda_consumer_sqs_receive_iam_policy" {
-  name        = "lambda_consumer_sqs_receive_iam_policy"
+  name        = "${var.prefix}lambda_consumer_sqs_receive_iam_policy"
   path        = "/"
   description = "IAM policy for reciving messages to Lambda from SQS"
 
@@ -46,7 +46,7 @@ EOF
 }
 
 resource "aws_iam_policy" "lambda_consumer_sns_publish_iam_policy" {
-  name        = "lambda_consumer_sns_publish_iam_policy"
+  name        = "${var.prefix}lambda_consumer_sns_publish_iam_policy"
   path        = "/"
   description = "IAM policy for publish events from Lambda to SNS"
 
@@ -68,7 +68,7 @@ EOF
 }
 
 resource "aws_iam_policy" "lambda_consumer_dynamo_put_iam_policy" {
-  name        = "lambda_consumer_dynamo_put_iam_policy"
+  name        = "${var.prefix}lambda_consumer_dynamo_put_iam_policy"
   path        = "/"
   description = "IAM policy for put items from Lambda to DynamoDB"
 
@@ -135,7 +135,7 @@ resource "aws_cloudwatch_log_group" "lambda_consumer_log_group" {
 
 resource "aws_iam_policy" "lambda_iam_consumer_logging" {
   provider    = aws.cloud
-  name        = "lambda_logging_consumer"
+  name        = "${var.prefix}lambda_logging_consumer"
   path        = "/"
   description = "IAM policy for logging from a lambda consumer"
 

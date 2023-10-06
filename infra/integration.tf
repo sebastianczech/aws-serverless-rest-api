@@ -5,13 +5,13 @@ locals {
 resource "aws_sqs_queue" "localstack_sqs_serverless_rest_api" {
   count    = var.create_services_on_localstack ? 1 : 0
   provider = aws.localstack
-  name     = "localstack_sqs_serverless_rest_api"
+  name     = "${var.prefix}localstack_sqs_serverless_rest_api"
 }
 
 resource "aws_sns_topic" "localstack_sns_serverless_rest_api" {
   count    = var.create_services_on_localstack ? 1 : 0
   provider = aws.localstack
-  name     = "localstack_sns_serverless_rest_api"
+  name     = "${var.prefix}localstack_sns_serverless_rest_api"
 }
 
 # resource "aws_sqs_queue_policy" "cloud_sqs_serverless_rest_api_policy" {
@@ -40,7 +40,7 @@ resource "aws_sns_topic" "localstack_sns_serverless_rest_api" {
 
 resource "aws_sqs_queue" "cloud_sqs_serverless_rest_api" {
   provider = aws.cloud
-  name     = "cloud_sqs_serverless_rest_api"
+  name     = "${var.prefix}cloud_sqs_serverless_rest_api"
 }
 
 resource "aws_sns_topic_subscription" "cloud_sns_topic_email_subscription" {
@@ -52,5 +52,5 @@ resource "aws_sns_topic_subscription" "cloud_sns_topic_email_subscription" {
 
 resource "aws_sns_topic" "cloud_sns_serverless_rest_api" {
   provider = aws.cloud
-  name     = "cloud_sns_serverless_rest_api"
+  name     = "${var.prefix}cloud_sns_serverless_rest_api"
 }
